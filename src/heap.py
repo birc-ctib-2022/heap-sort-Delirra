@@ -99,11 +99,11 @@ class Heap(Generic[Ord]):
         # FIXME:
         # You can change this if you want the actual list to be
         # longer than the part you consider a heap.
-        return len(self.x)
+        return self.length
 
     def __bool__(self) -> int:
         """Return true if there are more elements in the heap."""
-        return len(self) > 0
+        return self.length > 0
 
     def __init__(self, x: list[Ord], select: Selector):
         """
@@ -114,6 +114,7 @@ class Heap(Generic[Ord]):
         """
         self.x = x
         self._select = select
+        self.length = len(self.x)
         self._heapify()
 
     def _heapify(self) -> None:
@@ -149,8 +150,9 @@ class Heap(Generic[Ord]):
     def pop(self) -> Ord:
         """Remove the smallest value and return it."""
         val = self.x[0]
-        self.x[0], self.x[len(self)-1] = self.x[len(self)-1], self.x[0]
-        self.x.pop()  # FIXME: Changes the list; maybe you don't want this
+        self.x[0], self.x[self.length - 1] = self.x[self.length - 1], self.x[0]
+        self.length -= 1
+        #self.x.pop()  # FIXME: Changes the list; maybe you don't want this
         self._fix_down(0)
         return val
 
@@ -176,8 +178,9 @@ def min_heap_sort(x: list[Ord]) -> list[Ord]:
     """
     heap = Heap.min_heap(x)
     y = []
-    while heap:
+    while heap.length:
         y.append(heap.pop())
+        print(y)
     return y
 
 
@@ -190,6 +193,11 @@ def max_heap_sort(x: list[Ord]) -> list[Ord]:
     """
     heap = Heap.max_heap(x)
     y = []
-    while heap:
+    while heap.length:
         y.append(heap.pop())
+        print(y)
     return y
+
+
+min_heap_sort([1, 4, 2, 3, 5])
+max_heap_sort([1, 4, 2, 3, 5])
